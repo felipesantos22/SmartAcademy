@@ -1,6 +1,13 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+} from '@nestjs/common';
 import { AppService } from './app.service';
-import { User } from '@prisma/client';
 import userDTO from './interfaces/user';
 
 @Controller()
@@ -9,13 +16,25 @@ export class AppController {
 
   @Post('user')
   async createUser(@Body() user: userDTO) {
-    const create = this.appService.createUserService(user);
+    const create = await this.appService.createUserService(user);
     return create;
   }
 
   @Get('user')
-  getHello(): Promise<User[]> {
-    const read = this.appService.getAll();
+  async readUser() {
+    const read = await this.appService.readUserService();
     return read;
+  }
+
+  @Put('user/:id')
+  async updateUser(@Param('id') id: number, @Body() user: userDTO) {
+    const update = await this.appService.updateUserService(Number(id), user);
+    return update;
+  }
+
+  @Delete('user/:id')
+  async deleteUser(@Param('id') id: number) {
+    const deleteId = await this.appService.deleteUser(+id);
+    return deleteId;
   }
 }

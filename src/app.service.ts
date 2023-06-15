@@ -15,8 +15,29 @@ export class AppService {
     return create;
   }
 
-  async getAll() {
+  async readUserService() {
     const read = await this.prisma.user.findMany();
     return read;
+  }
+
+  async updateUserService(id: number, user: userDTO) {
+    const update = await this.prisma.user.update({
+      where: {
+        id,
+      },
+      data: {
+        ...user,
+      },
+    });
+    return update;
+  }
+
+  async deleteUser(id: number) {
+    const deleteId = await this.prisma.user.delete({
+      where: {
+        id,
+      },
+    });
+    return deleteId;
   }
 }
